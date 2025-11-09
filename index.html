@@ -10,7 +10,6 @@
   label { display: block; margin-top: 10px; }
   input { width: 100%; padding: 5px; margin-top: 5px; }
   button { margin-top: 10px; padding: 10px; cursor: pointer; }
-  /* Top-right buttons */
   .top-right-buttons {
     position: fixed;
     top: 20px;
@@ -22,7 +21,7 @@
   }
   #sellingBox {
     position: fixed;
-    top: 100px; /* below buttons */
+    top: 100px;
     right: 20px;
     background: #f1f1f1;
     padding: 10px;
@@ -44,10 +43,10 @@
 <div class="calculator" id="mainCalculator">
   <h3>Main Calculator</h3>
   <label>Total Cost:
-    <input type="number" id="totalCost" value="1500">
+    <input type="number" class="tabEnter" id="totalCost" value="1500">
   </label>
   <label>Quantity:
-    <input type="number" id="quantity" value="234">
+    <input type="number" class="tabEnter" id="quantity" value="234">
   </label>
   <button onclick="calculateMain()">Calculate</button>
   <p>Capital per item: <span id="capital">0</span></p>
@@ -57,10 +56,10 @@
 <div class="calculator" id="pworldCalculator" style="display:none;">
   <h3>Pworld Calculator</h3>
   <label>Total:
-    <input type="number" id="pTotal" value="1500">
+    <input type="number" class="tabEnter" id="pTotal" value="1500">
   </label>
   <label>Quantity:
-    <input type="number" id="pQuantity" value="234">
+    <input type="number" class="tabEnter" id="pQuantity" value="234">
   </label>
   <button onclick="calculatePworld()">Calculate</button>
   <p>Grand Total (Total × 0.97 × 0.99): <span id="grandTotal">0</span></p>
@@ -68,10 +67,9 @@
   <p>Selling price (capital + 5%): <span id="pSelling">0</span></p>
 </div>
 
-<!-- Floating Selling Box -->
 <div id="sellingBox">
   <label>Capital:
-    <input type="number" id="floatCapital" value="45">
+    <input type="number" class="tabEnter" id="floatCapital" value="45">
   </label>
   <button onclick="calculateSelling()">Calculate Selling</button>
   <p>Selling Price: <span id="floatSelling">0</span></p>
@@ -107,7 +105,7 @@ function calculateSelling() {
   document.getElementById('floatSelling').innerText = selling.toFixed(2);
 }
 
-// Toggle calculator visibility and update button text
+// Toggle calculator visibility
 document.getElementById('pworldBtn').addEventListener('click', () => {
   const pworldCalc = document.getElementById('pworldCalculator');
   const mainCalc = document.getElementById('mainCalculator');
@@ -124,10 +122,23 @@ document.getElementById('pworldBtn').addEventListener('click', () => {
   }
 });
 
-// Toggle floating selling box visibility
+// Toggle floating selling box
 document.getElementById('sellingBtn').addEventListener('click', () => {
   const box = document.getElementById('sellingBox');
   box.style.display = box.style.display === 'none' ? 'block' : 'none';
+});
+
+// ENTER key behaves like TAB
+document.querySelectorAll('.tabEnter').forEach((input, index, array) => {
+  input.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      const nextInput = array[index + 1];
+      if (nextInput) {
+        nextInput.focus();
+      }
+    }
+  });
 });
 </script>
 
