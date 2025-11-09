@@ -18,6 +18,7 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    z-index: 1000;
   }
   #sellingBox {
     position: fixed;
@@ -29,17 +30,18 @@
     border-radius: 5px;
     display: none;
     width: 200px;
+    z-index: 999;
   }
 </style>
 </head>
 <body>
 
-
-<div class="calculator" id="mainCalculator">
-  <div class="top-right-buttons">
+<div class="top-right-buttons">
   <button id="pworldBtn">pworld</button>
   <button id="sellingBtn">Selling</button>
 </div>
+
+<div class="calculator" id="mainCalculator">
   <h3>Main Calculator</h3>
   <label>Total Cost:
     <input type="number" id="totalCost" value="1500">
