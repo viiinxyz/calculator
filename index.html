@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Price Calculator</title>
+<title>Price Calc</title>
 <style>
   body { font-family: Arial, sans-serif; padding: 20px; position: relative; }
   .calculator { margin-top: 20px; padding: 15px; border: 1px solid #ccc; width: 300px; }
@@ -31,6 +31,14 @@
     width: 200px;
     z-index: 999;
   }
+    .screen{
+        background-color: rgb(5, 43, 43);
+        color: white;
+    }
+
+#capital, #selling, #grandTotal, #pCapital, #pSelling{
+    color: greenyellow;
+}
 </style>
 </head>
 <body>
@@ -48,9 +56,12 @@
   <label>Quantity:
     <input type="number" class="tabEnter" id="quantity" value="234">
   </label>
-  <button onclick="calculateMain()">Calculate</button>
+  <button id="mainCalcBtn" onclick="calculateMain()">Calculate</button>
+<div class="screen">
+
   <p>Capital per item: <span id="capital">0</span></p>
-  <p>Selling price (capital + 5%): <span id="selling">0</span></p>
+  <p>Selling price (5%): <span id="selling">0</span></p>
+  </div>
 </div>
 
 <div class="calculator" id="pworldCalculator" style="display:none;">
@@ -61,17 +72,19 @@
   <label>Quantity:
     <input type="number" class="tabEnter" id="pQuantity" value="234">
   </label>
-  <button onclick="calculatePworld()">Calculate</button>
-  <p>Grand Total (Total × 0.97 × 0.99): <span id="grandTotal">0</span></p>
-  <p>Capital per item: <span id="pCapital">0</span></p>
-  <p>Selling price (capital + 5%): <span id="pSelling">0</span></p>
+  <button id="pworldCalcBtn" onclick="calculatePworld()">Calculate</button>
+  <div class="screen">
+  <p>New Total : <span id="grandTotal">0</span></p>
+  <p>Capital: <span id="pCapital">0</span></p>
+  <p>Selling price(5%): <span id="pSelling">0</span></p>
+  </div>
 </div>
 
 <div id="sellingBox">
   <label>Capital:
     <input type="number" class="tabEnter" id="floatCapital" value="45">
   </label>
-  <button onclick="calculateSelling()">Calculate Selling</button>
+  <button id="sellingCalcBtn" onclick="calculateSelling()">Calculate Selling</button>
   <p>Selling Price: <span id="floatSelling">0</span></p>
 </div>
 
@@ -128,18 +141,27 @@ document.getElementById('sellingBtn').addEventListener('click', () => {
   box.style.display = box.style.display === 'none' ? 'block' : 'none';
 });
 
-// ENTER key behaves like TAB
-document.querySelectorAll('.tabEnter').forEach((input, index, array) => {
-  input.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const nextInput = array[index + 1];
-      if (nextInput) {
-        nextInput.focus();
+// EN
+function setupEnterToTabOrCalculate(containerSelector, calcBtnId) {
+  const inputs = document.querySelectorAll(containerSelector + ' input.tabEnter');
+  inputs.forEach((input, index) => {
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        if (index + 1 < inputs.length) {
+          inputs[index + 1].focus();
+        } else {
+          document.getElementById(calcBtnId).click();
+        }
       }
-    }
+    });
   });
-});
+}
+
+// Setup
+setupEnterToTabOrCalculate('#mainCalculator', 'mainCalcBtn');
+setupEnterToTabOrCalculate('#pworldCalculator', 'pworldCalcBtn');
+setupEnterToTabOrCalculate('#sellingBox', 'sellingCalcBtn');
 </script>
 
 </body>
