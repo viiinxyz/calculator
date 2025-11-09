@@ -5,17 +5,39 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Price Calculator</title>
 <style>
-  body { font-family: Arial, sans-serif; padding: 20px; }
+  body { font-family: Arial, sans-serif; padding: 20px; position: relative; }
   .calculator { margin-top: 20px; padding: 15px; border: 1px solid #ccc; width: 300px; }
   label { display: block; margin-top: 10px; }
   input { width: 100%; padding: 5px; margin-top: 5px; }
-  button { margin-top: 15px; padding: 10px; cursor: pointer; }
-  #pworldBtn { position: absolute; top: 20px; left: 20px; }
+  button { margin-top: 10px; padding: 10px; cursor: pointer; }
+  /* Top-right buttons */
+  .top-right-buttons {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  #sellingBox {
+    position: fixed;
+    top: 100px; /* below buttons */
+    right: 20px;
+    background: #f1f1f1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    display: none;
+    width: 200px;
+  }
 </style>
 </head>
 <body>
 
-<button id="pworldBtn">pworld</button>
+<div class="top-right-buttons">
+  <button id="pworldBtn">pworld</button>
+  <button id="sellingBtn">Selling</button>
+</div>
 
 <div class="calculator" id="mainCalculator">
   <h3>Main Calculator</h3>
@@ -44,6 +66,15 @@
   <p>Selling price (capital + 5%): <span id="pSelling">0</span></p>
 </div>
 
+<!-- Floating Selling Box -->
+<div id="sellingBox">
+  <label>Capital:
+    <input type="number" id="floatCapital" value="45">
+  </label>
+  <button onclick="calculateSelling()">Calculate Selling</button>
+  <p>Selling Price: <span id="floatSelling">0</span></p>
+</div>
+
 <script>
 function calculateMain() {
   let totalCost = parseFloat(document.getElementById('totalCost').value);
@@ -68,9 +99,33 @@ function calculatePworld() {
   document.getElementById('pSelling').innerText = selling.toFixed(2);
 }
 
-// Show Pworld calculator when button is clicked
+function calculateSelling() {
+  let capital = parseFloat(document.getElementById('floatCapital').value);
+  let selling = capital * 1.05;
+  document.getElementById('floatSelling').innerText = selling.toFixed(2);
+}
+
+// Toggle calculator visibility and update button text
 document.getElementById('pworldBtn').addEventListener('click', () => {
-  document.getElementById('pworldCalculator').style.display = 'block';
+  const pworldCalc = document.getElementById('pworldCalculator');
+  const mainCalc = document.getElementById('mainCalculator');
+  const btn = document.getElementById('pworldBtn');
+  
+  if (pworldCalc.style.display === 'none') {
+    pworldCalc.style.display = 'block';
+    mainCalc.style.display = 'none';
+    btn.innerText = 'main';
+  } else {
+    pworldCalc.style.display = 'none';
+    mainCalc.style.display = 'block';
+    btn.innerText = 'pworld';
+  }
+});
+
+// Toggle floating selling box visibility
+document.getElementById('sellingBtn').addEventListener('click', () => {
+  const box = document.getElementById('sellingBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
 });
 </script>
 
